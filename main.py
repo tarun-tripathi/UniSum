@@ -22,7 +22,7 @@ import os
 load_dotenv()
 hf_api_key = os.getenv("HUGGINGFACEHUB_API_TOKEN")
 # from docx import Document   # for Word documents
-from pptx import Presentation  # for PowerPoint files
+# from pptx import Presentation  # for PowerPoint files
 
 import uuid
 # from langchain_unstructured import UnstructuredLoader
@@ -281,109 +281,6 @@ def webQueryRequest(postBody:WebRagRequest2):
 # -----------------------------------------------------------------------------------------------------------------------------------------
 # -----------------------------------------------------------------------------------------------------------------------------------------
 
-class YtubeRagPostRequest(BaseModel):
-    video_id:Annotated[str,Field(..., title="id of youtube video with eng transcript available",description="For rag based application using Youtube Transcript API",examples=["hfbhjfbd","jbdjbcd"])]
-    question:Annotated[str,Field(...)]
-
-
-@app.post("/ytube-transcript")
-def ytube_rag_app(postBody:YtubeRagPostRequest):
-  try:
-    ytt_api = YouTubeTranscriptApi()
-    video_id=postBody.video_id
-    lists=ytt_api.list(video_id)
-    # print(lists)
-    english=False
-    # lang=""
-    # lang_code=""
-         
-    for l in lists:
-        if l.language_code=="en":
-           english=True
-           break
-        # else:
-        #     lang=l.language
-        #     lang_code=l.language_code
-
-    if english:
-
-        transcripts=ytt_api.fetch(video_id, languages=['en'], preserve_formatting=True)
-        text=" ".join([transcript.text for transcript in transcripts])
-        print("--------------------------------------------")
-        print("Transcripts")
-        print("------------------------------------------")
-        print(text)
-        pages = [Document(page_content=text)]
-
-        separators=[
-        "\n\n",
-        "\n",
-        ".",
-        # " ",
-        ""
-    ]
-        text_splitter = RecursiveCharacterTextSplitter(
-    chunk_size=450, chunk_overlap=50, separators= separators 
-    # 256-512 with overlap 10-25% default 512 tokens and 128 overlap
-        )
-        splits = text_splitter.split_documents(pages)
-        print("-------------------------------------")
-        print("No. of chunks created")
-        print("--------------------------")
-        print(len(splits))
-        embedding_model = HuggingFaceEmbeddings(
-            model_name="sentence-transformers/all-MiniLM-L6-v2"
-        )
-
-        vector_store=Chroma(
-            embedding_function=embedding_model,
-            persist_directory='chroma_db',
-            collection_name= str(uuid.uuid4())+"collection"
-        )
-        
-        retriver=vector_store.as_retriever(search_kwargs={"k":5})
-
-
-        # for split in splits:
-        #     print(split.page_content)
-        #     print("----------------")
-        #     print("----------------")
-
-
-
-        ids=vector_store.add_documents(splits)
-        print("No. of ids created=no of chunks stored in chroma vector store")
-        print("-------------------------------------------------------------------------------")
-        print(ids)
-        print(len(ids))
-          
-        docs=retriver.invoke(postBody.question)
-
-        retrieved_text=""
-        for doc in docs:
-            retrieved_text+=doc.page_content
-        message=prompt.invoke({"context":retrieved_text,"question":postBody.question})
-        output=chat_model.invoke(message)
-        print("The fetched chunks from vector stor most related to query")
-        print("-----------------------------------------------------------------------")
-        print(retrieved_text)
-        print("----------------------------------------------------------------------")
-        print("The final output as given by llm model")
-        print("-------------------------------------------------------------")
-        print(output.content)
-        print("----------------------------------------------")
-        print("Successfully Executed")
-        print("--------------------------------------------")
-        return {"message":clean_response(output.content)}
-    
-    else:
-        print("No english transcripts available for the video")
-        return {"message":"No english transcripts available for the video"}
-        
-
-  except (TranscriptsDisabled, NoTranscriptFound) as e:
-    print("No captions available for this video ",e)
-    return {"error": str(e)}
-
-        
-
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
