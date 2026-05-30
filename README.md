@@ -1,22 +1,22 @@
-# 🧠 UniSum — Multi-Source RAG Application
+#  UniSum — Multi-Source RAG Application
 
 > An intelligent AI-powered backend that lets you **ask questions** from PDFs, Websites, and YouTube videos using Retrieval-Augmented Generation (RAG).
 
 ---
 
-## 📌 What is UniSum?
+##  What is UniSum?
 
 UniSum is a **FastAPI-based RAG (Retrieval-Augmented Generation) system** that:
-- 📄 Ingests **PDF documents**
-- 🌐 Scrapes and understands **websites**
-- 🎥 Extracts transcripts from **YouTube videos**
-- 🤖 Uses **DeepSeek LLM** (via HuggingFace) to answer your questions based on the content
+-  Ingests **PDF documents**
+-  Scrapes and understands **websites**
+-  Extracts transcripts from **YouTube videos**
+-  Uses **DeepSeek LLM** (via HuggingFace) to answer your questions based on the content
 
 No hallucinations — the AI only answers from the content **you provide**.
 
 ---
 
-## 🗂️ Project Structure
+##  Project Structure
 
 ```
 MultiSourceRAG/
@@ -34,7 +34,7 @@ MultiSourceRAG/
 
 ---
 
-## ⚙️ Tech Stack
+##  Tech Stack
 
 | Layer | Technology |
 |---|---|
@@ -49,7 +49,7 @@ MultiSourceRAG/
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### 1. Clone the Repository
 
@@ -100,7 +100,7 @@ Server will start at: **http://localhost:8000**
 
 ---
 
-## 🔌 API Endpoints
+##  API Endpoints
 
 ### `GET /`
 Health check — confirms server is running.
@@ -180,7 +180,7 @@ Ask a question about a loaded website.
 
 ---
 
-## 🧪 How to Test
+##  How to Test
 
 ### Option 1: Swagger UI (Easiest)
 Open in browser: **http://localhost:8000/docs**
@@ -206,7 +206,7 @@ See `MANUAL_TESTING.md` for detailed Postman steps.
 
 ---
 
-## 🔄 How It Works
+##  How It Works
 
 ```
 User Input (PDF / URL / YouTube)
@@ -233,7 +233,7 @@ User Input (PDF / URL / YouTube)
 
 ---
 
-## 🛡️ Notes
+##  Notes
 
 - The AI **only answers from provided content** — it will return `"no"` if the answer isn't found
 - `chroma_db/` is auto-generated locally — don't delete it while server is running
@@ -242,7 +242,7 @@ User Input (PDF / URL / YouTube)
 
 ---
 
-## 👥 Team
+##  Team
 
 | Name | Enrollment No. |
 |---|---|
@@ -256,6 +256,6 @@ User Input (PDF / URL / YouTube)
 
 ---
 
-## 📄 License
+##  License
 
 This project was developed as a Major Project for B.Tech (AI & ML) — Session 2025-26.
